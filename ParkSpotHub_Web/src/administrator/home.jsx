@@ -146,14 +146,15 @@ function Home() {
             <div className="mt-6">
               <Title>Top 20 Usuarios</Title>
               {top20Users.length > 0 ? (
-                <BarList
-                  data={top20Users.map((usuario) => ({
-                    name: usuario.username,
-                    rating: usuario.rating,
-                  }))}
-                  valueFormatter={(value) => `Rating: ${value}`}
-                  className="mt-6"
-                />
+                <List>
+                  {top20Users.map((usuario) => (
+                    <ListItem>
+                      <Badge key={usuario.id} color="blue" icon={undefined}>
+                        {usuario.username} - Rating: {usuario.rating}⭐
+                      </Badge>
+                    </ListItem>
+                  ))}
+              </List>
               ) : (
                 <p>Cargando...</p>
               )}
