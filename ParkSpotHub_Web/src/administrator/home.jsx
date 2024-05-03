@@ -10,8 +10,8 @@ function Home() {
   
   useEffect(() => {
     const usersCollection = collection(db, 'users');
-    const q = query(usersCollection, orderBy('rating', 'desc'), limit(20));
-    getDocs(q)
+    const usersQuery = query(usersCollection, orderBy('rating', 'desc'));
+    getDocs(usersQuery)
     .then((resp) => {
       setTop20Users(
         resp.docs.map((doc) => {
@@ -24,7 +24,7 @@ function Home() {
   const [worstRatedUsers, setWorstRatedUsers] = useState([]);
   useEffect(() => {
     const usersCollection = collection(db, 'users');
-    const q = query(usersCollection, orderBy('rating', 'asc'), limit(20));
+    const q = query(usersCollection, orderBy('rating', 'asc'));
     getDocs(q)
     .then((resps) => {
       setWorstRatedUsers(
@@ -87,13 +87,12 @@ function Home() {
 
   return (
     <main className="flex">
-    <Sidebar />
-    <div className="flex-1 m-8">
-      <h1 className="text-2xl font-bold mb-8">Inicio</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <Sidebar />
+      <div className="flex-1 m-8">
+        <h1 className="text-2xl font-bold mb-8">Inicio</h1>
+        <div className="grid grid-cols-4 gap-8">
           <Card
-            className="mx-auto max-w-xs"
+            className="max-w-xs"
             decoration="top"
             decorationColor="indigo"
           >
@@ -105,7 +104,7 @@ function Home() {
             </p>
           </Card>
           <Card
-            className="mx-auto max-w-xs"
+            className="max-w-xs"
             decoration="top"
             decorationColor="indigo"
           >
@@ -117,7 +116,7 @@ function Home() {
             </p>
           </Card>
           <Card
-            className="mx-auto max-w-xs"
+            className="max-w-xs"
             decoration="top"
             decorationColor="indigo"
           >
@@ -125,11 +124,11 @@ function Home() {
               Promedio de precios x día
             </p>
             <p className="text-3xl text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">
-              {averagePriceDays}
+              {isNaN(averagePriceDays) ? '-' : averagePriceDays.toFixed(2)}
             </p>
           </Card>
           <Card
-            className="mx-auto max-w-xs"
+            className="max-w-xs"
             decoration="top"
             decorationColor="indigo"
           >
@@ -137,37 +136,37 @@ function Home() {
               Promedio de precios x hora
             </p>
             <p className="text-3xl text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">
-              {averagePriceHours}
+              {isNaN(averagePriceHours) ? '-' : averagePriceHours.toFixed(2)}
             </p>
           </Card>
         </div>
-        <div>
-          <Card className="mb-8">
+        <div className="grid grid-cols-2 gap-8 mt-8">
+          <Card>
             <div className="mt-6">
               <Title>Top 20 Usuarios</Title>
               {top20Users.length > 0 ? (
                 <List>
                   {top20Users.map((usuario) => (
-                    <ListItem>
-                      <Badge key={usuario.id} color="blue" icon={undefined}>
+                    <ListItem key={usuario.id} >
+                      <Badge color="blue" icon={undefined}>
                         {usuario.username} - Rating: {usuario.rating}⭐
                       </Badge>
                     </ListItem>
                   ))}
-              </List>
+                </List>
               ) : (
                 <p>Cargando...</p>
               )}
             </div>
           </Card>
-          <Card className="mb-8">
+          <Card>
             <div className="mt-6">
               <Title>Top 20 Peores Usuarios</Title>
               {worstRatedUsers.length > 0 ? (
                 <List>
                   {worstRatedUsers.map((usuario) => (
-                    <ListItem>
-                      <Badge key={usuario.id} color="red" icon={undefined}>
+                    <ListItem key={usuario.id}>
+                      <Badge color="red" icon={undefined}>
                         {usuario.username} - Rating: {usuario.rating}⭐
                       </Badge>
                     </ListItem>
@@ -180,8 +179,7 @@ function Home() {
           </Card>
         </div>
       </div>
-    </div>
-  </main>
+    </main>
   )
 }
 
